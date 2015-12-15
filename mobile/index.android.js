@@ -17,7 +17,7 @@ var {
 
 var REQUEST_URL = 'http://localhost:8081/api/keywords';
 
-var enhancedSearch = React.createClass({
+var mobile = React.createClass({
   getInitialState: function() {
     return {
         text: null,
@@ -115,4 +115,4 @@ var styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('enhancedSearch', () => enhancedSearch);
+AppRegistry.registerComponent('mobile', () => mobile);

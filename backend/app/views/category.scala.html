@@ -1,0 +1,39 @@
+@(category: domain.Category)
+
+@display(displayedCategory: domain.Category) = {
+    <li>
+        <a href="/catalog?category=@displayedCategory.key">
+            @displayedCategory.name
+        </a>
+
+        <ul>
+        @displayedCategory.children.map { firstChild =>
+            <li>
+                <a href="/catalog?category=@firstChild.key">
+                @firstChild.name
+                </a>
+            </li>
+            <ul>
+            @firstChild.children.map { secondChild =>
+                <li>
+                    <a href="/catalog?category=@secondChild.key">
+                    @secondChild.name
+                    </a>
+                </li>
+            }
+            </ul>
+        }
+        </ul>
+    </li>
+}
+
+@index(category.name) {
+    <ul>
+        @category.children.map { mainCat =>
+            @display(mainCat)
+        }
+    </ul>
+}
+
+
+

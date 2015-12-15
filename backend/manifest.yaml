@@ -1,0 +1,6 @@
+---
+application_name: freshly
+team_name: Zalando/Technology/Hackweek
+stateful: false
+exposed_ports: [9000]
+root: true

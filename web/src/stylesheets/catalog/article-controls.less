@@ -1,0 +1,113 @@
+
+.article-controls {
+    position: absolute;
+    height:   40px;
+    box-sizing: border-box;
+    width:    100%;
+
+    .article-button:focus {
+        outline: none;
+    }
+
+    .article-button {
+        height: 40px;
+        width:  40px;
+        margin: 2.5px;
+        float:  right;
+        border: 0;
+    }
+
+    .article-button:hover {
+        opacity: 0.6;
+        transition-duration: 0.2s;
+        transition-property: all;
+        transition-timing-function:  ease-in-out;
+    }
+
+    .like {
+        background-color: rgba(34, 34, 34, 0.2);
+
+        i.hearth:after {
+            font-family: "Basic Icons";
+            content: "\e601";
+            font-style: normal;
+            color: white;
+            font-size: 26px;
+            line-height: 40px;
+        }
+    }
+
+    .dislike {
+        background-color: rgba(34, 34, 34, 0.2);
+
+        i.thumps-down:after {
+            font-family: "Basic Icons";
+            content: "\e605";
+            font-style: normal;
+            color: white;
+            font-size: 26px;
+            line-height: 40px;
+        }
+    }
+
+    .fav {
+        background-color: #ff4a4a;
+
+        i.hearth {
+            transform: rotateY(180deg);
+            transition-duration: 1.0s;
+            transition-property: all;
+            transition-timing-function:  ease-in-out;
+        }
+
+        i.thumps-down {
+            transform: rotateY(360deg);
+            transition-duration: 1.0s;
+            transition-property: all;
+            transition-timing-function:  ease-in-out;
+        }
+    }
+
+    .cart {
+        background-color: rgba(34, 34, 34, 0.2);
+        border: 0;
+
+        i.packet:after {
+            font-family: "Basic Icons";
+            content: "\e607";
+            font-style: normal;
+            color: white;
+            font-size: 26px;
+            line-height: 40px;
+        }
+    }
+}
+
+.article,
+.look {
+    .article-controls {
+        top:     -20px;
+        opacity:  0;
+        z-index:  5;
+        padding-right: 7.5px;
+
+        transition-delay: 0.2s;
+        transition-duration: 0.3s;
+        transition-property: all;
+        transition-timing-function: ease;
+
+    }
+
+    &:hover .article-controls {
+        top:   10px;
+        opacity: 1;
+    }
+}
+
+.article-details {
+    .article-controls {
+        bottom: 50px;
+        left: 0;
+    }
+}
+

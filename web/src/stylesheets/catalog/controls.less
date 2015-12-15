@@ -1,0 +1,35 @@
+.controls {
+    padding: 20px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 21;
+
+    .likes {
+        height: 60px;
+        width:  60px;
+        text-align: center;
+
+        .number {
+            line-height: 60px;
+            z-index: 5;
+            color: white;
+            margin-top: -2px;
+            font-weight: 300;
+            display: inline-block;
+        }
+
+        i.hearth:after {
+            padding: 20px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-family: "Basic Icons";
+            content: "\e601";
+            color: #ff4a4a;
+            font-style: normal;
+            font-size: 60px;
+            z-index: -1;
+        }
+    }
+}

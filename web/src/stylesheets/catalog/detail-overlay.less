@@ -1,0 +1,44 @@
+.detail-overlay {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+
+    opacity: 0;
+
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
+    transition-property: left, opacity;
+
+    > .articles {
+        width: 1168px;
+        margin: 0 auto;
+
+        .article-details {
+            position: relative;
+            height: 400px;
+            margin-top: 100px;
+            //transform: scale(0.9);
+
+            -webkit-animation-name: none;
+            -moz-animation-name: none;
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+    }
+}
+
+.detail-overlay-active {
+    .detail-overlay {
+        left: 0;
+        right: 0;
+        opacity: 1;
+    }
+
+    .catalog {
+        left: -100%;
+        opacity: 0;
+    }
+}

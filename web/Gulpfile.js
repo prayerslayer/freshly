@@ -1,12 +1,10 @@
 var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     concat = require('gulp-concat'),
-    eslint = require('gulp-eslint'),
-    babel = require('gulp-babel'),
     watch = require('gulp-watch'),
+    shell = require('shelljs'),
     spawn = require('child_process').spawn,
     cssmin = require('gulp-cssmin'),
-    sourcemaps = require('gulp-sourcemaps'),
     prefix = require('gulp-autoprefixer'),
     less = require('gulp-less'),
     node;
@@ -25,22 +23,9 @@ gulp.task('less', function() {
 
 gulp.task('build:css', ['less']);
 
-gulp.task('lint', function () {
-    return gulp.src('client/src/**/*.js')
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
-});
-
-gulp.task('build:js', ['lint'], function() {
-    return gulp
-        .src('client/**/*.js')
-        .pipe(sourcemaps.init())
-        .pipe(plumber())
-        .pipe(babel())
-        .pipe(concat('freshly.js'))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('dist'));
+gulp.task('build:js', function() {
+    // “All problems in computer science can be solved by another level of indirection”
+    shell.exec('npm run build');
 });
 
 gulp.task('watch:js', ['build'], function() {

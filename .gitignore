@@ -8,7 +8,5 @@ tmp
 .DS_Store
 node_modules/
 npm-debug.log
-web/public/javascripts
-web/public/freshly.js
-web/public/freshly.css
 *.map
+dist

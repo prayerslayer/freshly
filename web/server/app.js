@@ -10,6 +10,7 @@ var app = express();
 app.use('/articles', new ArticlesRepository().router());
 
 // serve static content from public and from target/client
+app.use(express.static(path.join(__dirname, '../dist')));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../target/client')));
 

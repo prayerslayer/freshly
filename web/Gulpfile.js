@@ -14,13 +14,13 @@ var gulp = require('gulp'),
 gulp.task('default', ['build']);
 
 gulp.task('less', function() {
-    return gulp.src('client/src/stylesheets/main.less')
+    return gulp.src('style/main.less')
             .pipe(less())
             .pipe(plumber())
             .pipe(prefix())
             .pipe(concat('freshly.css'))
             .pipe(cssmin())
-            .pipe(gulp.dest('public'));
+            .pipe(gulp.dest('dist'));
 });
 
 gulp.task('build:css', ['less']);
@@ -34,23 +34,23 @@ gulp.task('lint', function () {
 
 gulp.task('build:js', ['lint'], function() {
     return gulp
-        .src('client/src/index.js')
+        .src('client/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(plumber())
         .pipe(babel())
         .pipe(concat('freshly.js'))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('public'));
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch:js', ['build'], function() {
-    watch('client/src/**/*.js', { emitOnGlob: true }, function() {
+    watch('client/**/*.js', { emitOnGlob: true }, function() {
         gulp.run('build:js');
     });
 });
 
 gulp.task('watch:css', ['build'], function() {
-    watch('client/src/**/*.less', { emitOnGlob: true }, function() {
+    watch('style/**/*.less', { emitOnGlob: true }, function() {
         gulp.run('build:css');
     });
 });

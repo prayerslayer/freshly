@@ -7,7 +7,7 @@ require.config({
 
 // load all necessary dependencies
 require(['freshly', 'jquery'], function(Freshly, $) {
-    console.log('bootstrapped');
+    console.log('bootstrapped', freshly);
     var view = new Freshly.default($('#main'));
     view.bootstrap();
 });

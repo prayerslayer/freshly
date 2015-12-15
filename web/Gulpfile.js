@@ -36,13 +36,16 @@ gulp.task('build:js', ['lint'], function() {
         .pipe(plumber())
         .pipe(babel())
         .pipe(concat('freshly.js'))
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', ['build'], function() {
-    watch('app/assets/**/*.js', { emitOnGlob: true }, function() {
+    watch('src/**/*.js', { emitOnGlob: true }, function() {
         gulp.run('build:js');
+    });
+    watch('src/**/*.less', { emitOnGlob: true }, function() {
+        gulp.run('build:css');
     });
 });
 

@@ -4,10 +4,15 @@
 @import 'catalog/article-controls';
 @import 'catalog/article-details';
 @import 'catalog/detail-overlay';
+@import 'index/index';
 
 @font-face {
     font-family: "Basic Icons";
-    src: url(../fonts/icons.woff) format('woff');
+    src: url(fonts/Simple-Line-Icons.woff) format('woff');
+}
+
+* {
+    box-sizing: border-box;
 }
 
 html {
@@ -24,6 +29,10 @@ body {
 
 h1, h2, h3, h4, h5, strong, b {
     font-weight: 700;
+}
+
+img {
+    max-width: 100%;
 }
 
 #main {

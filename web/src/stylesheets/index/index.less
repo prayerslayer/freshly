@@ -1,0 +1,52 @@
+.index {
+    min-height: 100%;
+
+
+    .wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .hero {
+        width: 120%;
+        max-width: 120%;
+        position: relative;
+        left: -10%;
+    }
+
+    .search {
+        display: flex;
+
+        .search-icon {
+            flex: 0 0 auto;
+            font-size: 2em;
+            border: 1px solid #ccc;
+            border-left: none;
+            padding: 3px 10px;
+            color: #ccc;
+            &:after {
+                content: "\e090";
+                font-family: "Basic Icons";
+                display: inline-block;
+            }
+        }
+        input {
+            outline: none;
+            border: 1px solid #ccc;
+            flex: 1 1 auto;
+            line-height: 1.5;
+            padding: 10px;
+            font-family: inherit;
+            font-size: 1.25em;
+            border-right: none;
+        }
+    }
+
+    .grid {
+        > * {
+            float: left;
+            width: 100px;
+            margin-right: 10px;
+            margin-bottom: 3px;
+        }
+    }
+}

@@ -14,6 +14,7 @@ gulp.task('default', ['build']);
 gulp.task('less', function() {
     return gulp.src('src/stylesheets/main.less')
             .pipe(less())
+            .pipe(plumber())
             .pipe(prefix())
             .pipe(concat('freshly.css'))
             .pipe(cssmin())
@@ -49,4 +50,9 @@ gulp.task('watch', ['build'], function() {
     });
 });
 
-gulp.task('build', ['build:js', 'build:css']);
+gulp.task('copy:fonts', function() {
+    return gulp.src('src/fonts/*')
+            .pipe(gulp.dest('dist/fonts'));
+});
+
+gulp.task('build', ['build:js', 'build:css', 'copy:fonts']);

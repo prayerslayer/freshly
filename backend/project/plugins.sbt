@@ -10,5 +10,3 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.0.0")
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.0.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.0.0")
-
-addSbtPlugin("se.woodenstake" %% "sbt-gulp-task" % "0.1")

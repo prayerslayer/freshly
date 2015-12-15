@@ -1,0 +1,49 @@
+@import 'catalog/catalog';
+@import 'catalog/article';
+@import 'catalog/controls';
+@import 'catalog/article-controls';
+@import 'catalog/article-details';
+@import 'catalog/detail-overlay';
+@import 'index/index';
+
+@font-face {
+    font-family: "Basic Icons";
+    src: url(icons.woff) format('woff');
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+
+    margin: 20px 10px;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, strong, b {
+    font-weight: 700;
+}
+
+img {
+    max-width: 100%;
+}
+
+#main {
+    overflow: hidden;
+    position: relative;
+
+    /*&.detail-overlay-active {
+        overflow-y: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }*/
+}

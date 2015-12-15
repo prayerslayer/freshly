@@ -2,6 +2,9 @@
   "name": "freshly-frontend",
   "version": "0.90.0",
   "description": "Freshly: Frontend",
+  "scripts": {
+    "server": "cd server && node bootstrap.js"
+  },
   "repository": {
     "type": "git",
     "url": "ssh://git@stash.zalando.net:7999/~bwerthschult/freshly.git"
@@ -9,6 +12,7 @@
   "devDependencies": {
     "babel": "^6.3.13",
     "babel-eslint": "^4.1.6",
+    "babel-plugin-transform-es2015-modules-amd": "^6.3.13",
     "babel-plugin-transform-es2015-modules-umd": "^6.3.13",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-stage-2": "^6.3.13",
@@ -21,7 +25,10 @@
     "gulp-less": "^1.3.5",
     "gulp-plumber": "^0.6.5",
     "gulp-sourcemaps": "^1.1.5",
-    "gulp-watch": "^1.0.5",
-    "jshint-stylish": "^0.4.0"
+    "gulp-watch": "^1.0.5"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "traceur": "0.0.93"
   }
 }

@@ -4,9 +4,15 @@ body.index {
     > .wrapper {
         max-width: 800px;
         margin: 0 auto;
+        position: relative;
 
         > * {
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        > .removing {
+            transition: opacity 0.2s ease;
+            opacity: 0;
         }
     }
 
@@ -19,8 +25,11 @@ body.index {
         display: flex;
         margin: 30px 0;
         height: 50px;
+        width: 100%;
+        box-sizing: border-box;
         background-color: white;
         border: 1px solid #ccc;
+        transition: top 0.2s ease, margin-top 0.2s ease;
 
         .search-icon {
             flex: 0 0 auto;
@@ -45,15 +54,6 @@ body.index {
             padding: 5px 10px;
             font-family: inherit;
             font-size: 1.25em;
-        }
-    }
-
-    .grid {
-        > * {
-            float: left;
-            width: 100px;
-            margin-right: 10px;
-            margin-bottom: 3px;
         }
     }
 }

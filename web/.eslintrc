@@ -1,0 +1,33 @@
+{
+    "parser": "babel-eslint",
+    "ecmaFeatures": {
+        "arrowFunctions": true,
+        "blockBindings": true,
+        "classes": true,
+        "destructuring": true,
+        "modules": true,
+        "templateStrings": true,
+        "spread": true
+    },
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "quotes": [1, "single"],
+        "eol-last": 1,
+        "new-cap": 1,
+        "strict": [ 2, "global" ],
+        // in tests they are prevalent
+        "no-unused-expressions": 1,
+        // backbone works this way unfortunately
+        "no-new": 1,
+        // i actually like that
+        "no-underscore-dangle": 0,
+        // e.g. search endpoints offer `matched_rank`
+        "camelcase": 0,
+        // allow `!!something`
+        "no-extra-boolean-cast": 0,
+        // allow line breaks between function calls
+        "no-spaced-func": 0
+    }
+}

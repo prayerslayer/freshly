@@ -1,43 +1,49 @@
 var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     concat = require('gulp-concat'),
-    traceur = require('gulp-traceur'),
+    eslint = require('gulp-eslint'),
+    babel = require('gulp-babel'),
     watch = require('gulp-watch'),
-    jshint = require('gulp-jshint'),
+    cssmin = require('gulp-cssmin'),
     sourcemaps = require('gulp-sourcemaps'),
     prefix = require('gulp-autoprefixer'),
     less = require('gulp-less');
 
 gulp.task('default', ['build']);
 
-gulp.task( 'jshint', function() {
-    return gulp
-        .src('app/assets/**/*.js')
-        .pipe(plumber())
-        .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'));
+gulp.task('less', function() {
+    return gulp.src('src/stylesheets/main.less')
+            .pipe(less())
+            .pipe(prefix())
+            .pipe(concat('freshly.css'))
+            .pipe(cssmin())
+            .pipe(gulp.dest('dist'));
 });
 
-gulp.task( 'watch', ['build'], function() {
-    watch( 'app/assets/**/*.js', { emitOnGlob: true }, function() {
+gulp.task('build:css', ['less']);
+
+gulp.task('lint', function () {
+    return gulp.src('src/**/*.js')
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});
+
+gulp.task('build:js', ['lint'], function() {
+    return gulp
+        .src('src/**/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(plumber())
+        .pipe(babel())
+        .pipe(concat('freshly.js'))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('watch', ['build'], function() {
+    watch('app/assets/**/*.js', { emitOnGlob: true }, function() {
         gulp.run('build:js');
     });
 });
 
-gulp.task('build', ['build:js']);
-
-gulp.task('build:css', ['less']);
-
-gulp.task('build:js', ['jshint'], function() {
-    return gulp
-        .src('app/assets/**/*.js')
-        .pipe(sourcemaps.init())
-        .pipe(plumber())
-        .pipe(traceur({
-            modules: 'amd',
-            moduleName: true
-        }))
-        .pipe(concat('javascripts/freshly.js'))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest( 'target/web/public/main/'));
-});
+gulp.task('build', ['build:js', 'build:css']);

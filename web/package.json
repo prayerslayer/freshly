@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "express": "^4.13.3",
-    "traceur": "0.0.93"
+    "traceur": "0.0.93",
+    "uuid": "^2.0.1"
   }
 }

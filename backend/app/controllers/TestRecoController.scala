@@ -1,6 +1,7 @@
 package controllers
 
 import scala.collection.immutable.HashMap
+import scala.collection.parallel.immutable.ParMap
 
 import domain.UserSearchArticle.fromDataInput
 import domain.{UserSearchArticle, CatalogView}
@@ -25,7 +26,15 @@ object TestRecoController extends Controller{
    val groupedList =  catalogData.groupBy(_.searchString)
     
     val counts = groupedList.map(entry => (entry._1, getArticles(entry._2).size))
-    Ok(Json.toJson(counts))
+    Ok(Json.toJson(counts.filter(_._2 != 0)))
+  }
+  
+  def listFoundItemsWithSale = Action { request =>
+    val groupedList =  catalogData.groupBy(_.searchString)
+    val mappedList = groupedList.map(entry => (entry._1, getArticles(entry._2)))
+    val filteredList = mappedList.filter(elem => elem._2.contains({ cv:UserSearchArticle => cv.action.equals("SALE")}))
+    val counts: Map[String, Int] = filteredList.map(entry => (entry._1, entry._2.size))
+    Ok(Json.toJson(counts.filter(_._2 != 0)))
   }
   
   def getArticles(filteredList: Seq[CatalogView]):Seq[UserSearchArticle] = {

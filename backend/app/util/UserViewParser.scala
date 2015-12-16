@@ -7,7 +7,7 @@ import play.api.Logger
 
 class UserViewParser {
 
-  def parseRow(row: String): UserView = {
+  def parseRow(row: String): Option[UserView] = {
     val rowSplitted: Array[String] = row.split("\t")
     
     val timeStamp = rowSplitted(0)
@@ -32,14 +32,19 @@ class UserViewParser {
     }
 
     val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS")
-    UserView(DateTime.parse(timeStamp, formatter),
-             appDomain,
-              customerId,
-              sessionId,
-              action,
-              flowId,
-              searchTerm,
-              recoResults)
+    if(appDomain == 1) {
+      Some(UserView(DateTime.parse(timeStamp, formatter),
+        appDomain,
+        customerId,
+        sessionId,
+        action,
+        flowId,
+        searchTerm,
+        recoResults)) 
+    }else {
+      None
+    }
+    
   }
   
   def getTestString: String = 
@@ -47,8 +52,8 @@ class UserViewParser {
 
   def loadTestFile:Seq[UserView] = {
     Logger.info("Start Parsing user View File")
-       val source = scala.io.Source.fromFile("/home/nmahle/Downloads/documents-export-2015-12-15/realtimelogging_userview_tracking.log.2015-12-14")
+       val source = scala.io.Source.fromFile("/home/nmahle/tracking/realtimelogging_userview_tracking.log.2015-12-10")
       val lines: Seq[String] = try source.getLines().toList finally source.close()
-       lines.map(parseRow)
+       lines.map(parseRow).flatten
      }
 }

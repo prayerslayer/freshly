@@ -15,15 +15,15 @@ class   UserDataParser {
   
   def loadTestFile: Seq[UserAction] = {
     Logger.info("Start Parsing UserAction File")
-    val source = scala.io.Source.fromFile("/home/nmahle/Downloads/documents-export-2015-12-15/realtimelogging_useraction_tracking.log.2015-12-14")
+    val source = scala.io.Source.fromFile("/home/nmahle/tracking/realtimelogging_useraction_tracking.log.2015-12-10")
     val lines: Seq[String] = try source.getLines().toList finally source.close()
-    lines.map(parseRow)
+    lines.map(parseRow).flatten
   }
   
   def getTestString: String =
     """2015-12-10 00:00:38,681	15	ZI111N03Z-Q11	-	73001265740	102902E0376220805ACB476F62751E50.jvm_itr-http66_p0120	VIEWRECO	-	-	-	cda045d9-9145-4b9f-8fb5-d4979fda1878	n.	-""".stripMargin.trim
 
-  def parseRow(rowData: String):UserAction = {
+  def parseRow(rowData: String):Option[UserAction] = {
     val rowDataSplitted: Array[String] = rowData.split("\t")
     
     val timeStamp = rowDataSplitted(0)
@@ -59,17 +59,21 @@ class   UserDataParser {
     }
 
     val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS")
-    UserAction(DateTime.parse(timeStamp, formatter),
-               appDomnain,
-               configSku,
-                simpleSku,
-                customerId,
-                sessionId,
-                action,
-                quantity,
-                price,
-                orderId,
-                flowId,
-                referrerLink)
+    if(appDomnain == 1) {
+      Some(UserAction(DateTime.parse(timeStamp, formatter),
+        appDomnain,
+        configSku,
+        simpleSku,
+        customerId,
+        sessionId,
+        action,
+        quantity,
+        price,
+        orderId,
+        flowId,
+        referrerLink))
+    } else {
+      None
+    }
   }
 }

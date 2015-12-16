@@ -8,7 +8,7 @@ import play.api.Logger
 class CatalogParser {
   def loadTestFile:Seq[CatalogView] = {
     Logger.info("Start Parsing Catalog File")
-    val source = scala.io.Source.fromFile("/home/nmahle/Downloads/documents-export-2015-12-15/realtimelogging_catalog_tracking.log.2015-12-14")
+    val source = scala.io.Source.fromFile("/home/nmahle/tracking/realtimelogging_catalog_tracking.log.2015-12-10")
     val lines: Seq[String] = try source.getLines().toList finally source.close()
     lines.map(parseRow).flatten
   }
@@ -30,7 +30,7 @@ class CatalogParser {
     val hashValue = rowSplitted(8)
 
     val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS")
-    if(jsonData.contains("q=[")) {
+    if(jsonData.contains("q=[") && appDomain == 1) {
       Some(CatalogView(DateTime.parse(timeStamp, formatter),
         appDomain,
         customerId,

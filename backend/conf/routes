@@ -13,6 +13,7 @@ GET        /articles/look/:sku        controllers.ArticleController.getLook(sku)
 GET        /categories                controllers.CategoryController.getAll
 
 GET        /search                    controllers.TestRecoController.findBySearchTerm(q)
-GET         /found                      controllers.TestRecoController.listFoundItemsBySearch
+GET        /found                     controllers.TestRecoController.listFoundItemsBySearch
+GET         /foundSale                  controllers.TestRecoController.listFoundItemsWithSale
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file              controllers.Assets.at(path="/public", file)

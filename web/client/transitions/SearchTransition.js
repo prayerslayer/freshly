@@ -3,11 +3,14 @@ class SearchTransition {
         return to.startsWith('/search/');
     }
 
-    run() {
+    run(from, to) {
         Freshly.view.search.updateFromUrl();
+        if (from.startsWith('/search/')) {
+            return;
+        }
 
         var animationDone = this.runAnimation();
-        var contentLoaded = this.loadContent();
+        var contentLoaded = this.loadContent(to);
 
         Promise.all([animationDone, contentLoaded]).then(data => {
             data[1].children().not('#search').appendTo($('#main'));
@@ -48,8 +51,8 @@ class SearchTransition {
         });
     }
 
-    loadContent() {
-        return $.get(window.location.pathname).then(result => {
+    loadContent(path) {
+        return $.get(path).then(result => {
             return $(result).filter('#main');
         });
     }

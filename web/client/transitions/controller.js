@@ -19,7 +19,7 @@ class Controller {
             window.location.reload();
         } else {
             console.log('running transition!');
-            transition.run();
+            transition.run(this._path, window.location.pathname);
         }
     }
 }

@@ -21,6 +21,20 @@ class CatalogView {
         this._element = $('#results');
         this.search = new SearchField($('#search'));
 
+        this._init();
+
+        this._controls = new CatalogControls();
+        this._detailOverlay = new DetailOverlay();
+        this._grid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING);
+
+        this.articleChanged = Signal.create();
+
+        this._cleanup = [];
+
+        this.bootstrap();
+    }
+
+    _init() {
         this._openedArticles = {};
         this._likedArticles = {};
         this._dislikedArticles = {};
@@ -34,20 +48,14 @@ class CatalogView {
         this._buckets = new BucketStore();
         this._looks = [];
         this._skuPosition = {};
-
-        this._controls = new CatalogControls();
-        this._detailOverlay = new DetailOverlay();
-        this._grid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING);
-
-        this.articleChanged = Signal.create();
-
-        this._cleanup = [];
-
-        this.bootstrap();
     }
 
     bootstrap() {
-        var category = this._element.attr('data-category');
+        var searchTerm = this.search.getTerm();
+        this._cleanup.push(
+            this.search.changed.connect(term => this.purgeAndLoadArticles(term))
+        );
+
         this._gender = this._element.attr('data-gender');
 
         var catalogElement = $('<div class="catalog" />').append(this._grid.render());
@@ -64,8 +72,7 @@ class CatalogView {
         );
 
         // fetch some base articles
-        var articlesRequest = $.getJSON('/articles?category=' + category);
-        articlesRequest.done(articlesResult => this.createBucket('category', articlesResult));
+        this.loadArticles(this.search.getTerm());
 
         // fetch related search queries
         $.get('/relatedSearch?search=TODO')
@@ -86,6 +93,17 @@ class CatalogView {
         this.search.detach();
 
         this._cleanup.forEach(cleanup => cleanup());
+    }
+
+    purgeAndLoadArticles(term) {
+        this._init();
+        this._grid.purge();
+        this.loadArticles(term);
+    }
+
+    loadArticles(term) {
+        var articlesRequest = $.getJSON('/articles?search=' + term);
+        articlesRequest.done(articlesResult => this.createBucket('search', articlesResult));
     }
 
     addArticlePlaceholder() {

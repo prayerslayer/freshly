@@ -20,15 +20,15 @@ object Global extends GlobalSettings {
   }
 
   def initializeShopTheLook() = {
-    Logger.info("Initialize shop the look")
-    val resource = Play.application().classloader().getResource("shop-the-look.json")
-    val source = Source.fromURL(resource).mkString
-    val jsValue = Json.parse(source)
-
-    val looks = (jsValue \ "looks").as[List[JsValue]]
-    looks.foreach(x => processLook(x))
-
-    ShopTheLook.printDebug()
+//    Logger.info("Initialize shop the look")
+//    val resource = Play.application().classloader().getResource("shop-the-look.json")
+//    val source = Source.fromURL(resource).mkString
+//    val jsValue = Json.parse(source)
+//
+//    val looks = (jsValue \ "looks").as[List[JsValue]]
+//    looks.foreach(x => processLook(x))
+//
+//    ShopTheLook.printDebug()
   }
   
   def preCache() = {

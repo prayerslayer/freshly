@@ -3,10 +3,18 @@ package util
 import domain.UserAction
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+import play.api.Logger
 
 class   UserDataParser {
   
+  def getSessionid = {
+    val data = loadTestFile
+    val groupedData: Map[String, Seq[UserAction]] = data.groupBy(x => x.sessionId)
+    groupedData.map(entry => (entry._1, entry._2.size))
+  }
+  
   def loadTestFile: Seq[UserAction] = {
+    Logger.info("Start Parsing UserAction File")
     val source = scala.io.Source.fromFile("/home/nmahle/Downloads/documents-export-2015-12-15/realtimelogging_useraction_tracking.log.2015-12-14")
     val lines: Seq[String] = try source.getLines().toList finally source.close()
     lines.map(parseRow)

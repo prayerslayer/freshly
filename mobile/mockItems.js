@@ -1,9 +1,9 @@
 var shirt1 = require('./img/shirt1.jpg'),
-    shirt2 = require('./img/shirt2.jpg')
+    shirt2 = require('./img/shirt2.jpg'),
     shoe1 = require('./img/shoe1.jpg'),
-    shoe2 = require('./img/shoe2.jpg')
+    shoe2 = require('./img/shoe2.jpg'),
     clock1 = require('./img/clock1.jpg'),
-    jacket1 = require('./img/jacket1.jpg');;
+    jacket1 = require('./img/jacket1.jpg');
 module.exports = [
     {
         name: 'shoe1',

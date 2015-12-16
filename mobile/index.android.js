@@ -18,28 +18,29 @@ var {
 } = React;
 
 var REQUEST_URL = 'http://localhost:8081/api/keywords',
-    keywords = [];
+    keywords = [],
+    useMock = true;
 
 var mobile = React.createClass({
   getInitialState: function() {
     return {
-        useMock: false,
         text: null,
-        resultingItems: []
+        resultingItems: [],
+        mockItems: []
     }
   },
   submitButtonClicked: function() {
     if (this.state.text) {
         keywords = this.state.text.split(' ');
-        this.fetchData();
+        if(!useMock) {
+            this.fetchData();
+        } else {
+            this.setState({mockItems: Items});
+        }
     }
   },
 
   fetchData: function() {
-        this.setState({
-            resultingItems: Items,
-            useMock: true
-        });
         let body = {
             method: 'POST',
             headers: {
@@ -54,7 +55,9 @@ var mobile = React.createClass({
         fetch(REQUEST_URL, keywords).then(function(res) {
             if (res.ok) {
                 res.json().then(function(resJson) {
-                        this.setState({resultingItems: resJson});
+                        this.setState({
+                            resultingItems: resJson
+                        });
                     });
             } else {
                 console.log('Network response was not ok.')
@@ -66,14 +69,24 @@ var mobile = React.createClass({
   },
 
   render: function() {
-        let itemsView = this.state.resultingItems.map(item => {
-             if(keywords.find((keyword) => {
-                     return keyword === item.category
-                 })) {
-                 return (
-                     <View key={item.name}><Image style={styles.image} source={item.source} /></View>
-                 )}
-        });
+        let itemsView = null;
+        if (useMock) {
+           itemsView = this.state.mockItems.map(item => {
+              if (keywords.find((keyword) => {
+                      return keyword === item.category
+                  })) {
+                  return (
+                      <View key={item.name}><Image style={styles.image} source={item.source}/></View>
+                  )
+              }
+          });
+        } else {
+          itemsView = this.state.resultingItems.map(item => {
+              return (
+                  <View key={item.name}><Image style={styles.image} source={item.source}/></View>
+              )
+          });
+        }
 
         return (
              <View style={styles.container}>
@@ -83,7 +96,7 @@ var mobile = React.createClass({
                 <Text style={styles.welcome}>
                   Enhanced Article Search
                 </Text>
-                <View style={styles.searchRow}>
+                <View>
                     <TextInput style={styles.searchField} onChangeText={(text) => this.setState({text})}
                       placeholder='Enter keywords' value={this.state.text}/>
                     <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple()}

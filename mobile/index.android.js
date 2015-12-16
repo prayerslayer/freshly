@@ -5,8 +5,8 @@
 'use strict';
 
 var Items = require('./mockItems.js');
-var Item = require('./mockItem.js');
 var React = require('react-native');
+var Logo = require('./img/zalando-logo.png');
 var {
     AppRegistry,
     Image,
@@ -54,7 +54,7 @@ var mobile = React.createClass({
         fetch(REQUEST_URL, keywords).then(function(res) {
             if (res.ok) {
                 res.json().then(function(resJson) {
-                        return resJson;
+                        this.setState({resultingItems: resJson});
                     });
             } else {
                 console.log('Network response was not ok.')
@@ -66,20 +66,20 @@ var mobile = React.createClass({
   },
 
   render: function() {
-        let itemsView = null;
-        if(this.state.useMock) {
-            itemsView = this.state.resultingItems.map(item => {
-                 if(keywords.find((keyword) => {
-                         return keyword === item.category
-                     })) {
-                     return (
-                         <View key={item.name}><Image style={styles.image} source={item.source} /></View>
-                     )}
-            });
-        }
+        let itemsView = this.state.resultingItems.map(item => {
+             if(keywords.find((keyword) => {
+                     return keyword === item.category
+                 })) {
+                 return (
+                     <View key={item.name}><Image style={styles.image} source={item.source} /></View>
+                 )}
+        });
 
         return (
              <View style={styles.container}>
+                 <View style={styles.logoView}>
+                    <Image style={styles.logo} source={Logo}/>
+                 </View>
                 <Text style={styles.welcome}>
                   Enhanced Article Search
                 </Text>
@@ -104,40 +104,49 @@ var mobile = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  image: {
-    margin: 5,
-    width: 53,
-    height: 81,
-  },
-  imageList: {
-    flex: 1,
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    backgroundColor: '#F5FCFF'
-  },
-  searchField: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-  },
-  search: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  button: {
-    textAlign: 'center',
-    color: '#f08532',
-    marginBottom: 7,
+    container: {
+        flex: 1
+    },
+    welcome: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+    },
+    image: {
+        margin: 5,
+        width: 53,
+        height: 81,
+    },
+    imageList: {
+        flex: 1,
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+        backgroundColor: '#F5FCFF'
+    },
+    logoView: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    logo: {
+        height: 50,
+        width: 200,
+        resizeMode: 'contain'
+    },
+    searchField: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+    },
+    search: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+    },
+    button: {
+        textAlign: 'center',
+        color: '#f08532',
+        marginBottom: 7,
   }
 });
 

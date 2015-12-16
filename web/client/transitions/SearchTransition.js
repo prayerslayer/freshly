@@ -31,10 +31,14 @@ class SearchTransition {
             var background = root.children('#background');
             background.css({opacity: 0});
 
-            var currentPos = searchElement.position().top;
-            searchElement.css({top: currentPos, position: 'absolute'});
+            var currentPos = searchElement.position();
+            currentPos.left = (searchElement.parent().width() - searchElement.width()) / 2;
+            searchElement.css({top: currentPos.top, left: currentPos.left, position: 'absolute'});
+            searchElement.next().css({marginTop: searchElement.outerHeight(true)});
+
             window.setTimeout(() => {
                 searchElement.css({top: 0, marginTop: 0, boxShadow: 'none'});
+                $('body').animate({scrollTop: 0}, 500);
 
                 searchElement.one('transitionend webkitTransitionEnd oTransitionEnd', () => {
                     console.log('transition end!');

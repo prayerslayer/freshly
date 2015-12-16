@@ -14,17 +14,20 @@
                 class="hero"
                 src="https://secure-i4.ztat.net//camp/20/37/9f4003347b793d88638c2916d561.jpg"></img>
 
-            <div class="search">
+            <form class="search">
                 <input
                     type="search"
                     placeholder="Wie können wir dir helfen? ☺"
                     autofocus="autofocus" />
                 <span class="search-icon"></span>
-            </div>
+            </form>
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
         <script src="/freshly.js"></script>
-        <script src="/main.js"></script>
+
+        <script>
+            new Freshly.HomeView($('form.search')).bootstrap();
+        </script>
     </body>
 </html>

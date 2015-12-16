@@ -69,7 +69,7 @@ class ArticleControls {
   renderShoppingCartButton() {
     this._cartButton = $('<button type="button">').addClass('article-button cart');
     this._cartButton.on('click', () => {
-       window.open(this._data.shopUrl, this._data.name,"location=yes,")
+       window.open(this._data.shopUrl, this._data.name,'location=yes,')
     });
 
     var symbol = $('<i>').addClass('packet');

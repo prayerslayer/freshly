@@ -1,4 +1,3 @@
-import se.woodenstake.SbtGulpTask
 import com.typesafe.sbt.SbtNativePackager._
 import NativePackagerHelper._
 import NativePackagerKeys._ // with auto plugins this won't be necessary soon
@@ -18,13 +17,6 @@ libraryDependencies ++= Seq(
   cache,
   ws
 )
-
-SbtGulpTask.gulpSettings
-
-(WebKeys.pipeline in Assets) <<= (WebKeys.pipeline in Assets) dependsOn GulpKeys.gulp
-
-(WebKeys.assets in Assets) <<= (WebKeys.assets in Assets) dependsOn GulpKeys.gulp
-
 // since sbt-gulp-task is an unfinished plugin in version 0.1 uncomment the following line before building dist or stage but keep it commented for "activator clean run"
 //mappings in Assets ++= (target.value / "web/public/main/javascripts/" * "*" get) map (x => x -> ("javascripts/" + x.name))
 

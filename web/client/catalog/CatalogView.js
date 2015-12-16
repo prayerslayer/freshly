@@ -1,12 +1,19 @@
 import $ from 'jquery';
 import Article from './Article';
+import ArticlePlaceholder from './ArticlePlaceholder';
 import ArticleDetails from './ArticleDetails';
 import ArticleGrid from './ArticleGrid';
 import BucketStore from './BucketStore';
 import CatalogControls from './CatalogControls';
 import DetailOverlay from './DetailOverlay';
 import Look from './Look';
+import RelatedSearch from './RelatedSearch';
 import Signal from '../common/Signal';
+
+const GRID_ROWS = 8,
+      GRID_COL_WIDTH = 133,
+      GRID_ROW_HEIGHT = 200,
+      GRID_SPACING = 20;
 
 class CatalogView {
     constructor(element) {
@@ -27,7 +34,7 @@ class CatalogView {
 
         this._controls = new CatalogControls();
         this._detailOverlay = new DetailOverlay();
-        this._grid = new ArticleGrid(4, 277, 400, 20);
+        this._grid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING);
 
         this.articleChanged = Signal.create();
     }
@@ -51,9 +58,41 @@ class CatalogView {
         var articlesRequest = $.getJSON('/articles?category=' + category);
         articlesRequest.done(articlesResult => this.createBucket('category', articlesResult));
 
+        // fetch related search queries
+        $.get('/relatedSearch?search=TODO')
+        .done(relatedResults => relatedResults.forEach(result => this.addRelatedSearch(result)));
+
         // connect scroll and resize handlers
         $(window).scroll(() => this.checkVisibleArticles());
         $(window).resize(() => this.checkVisibleArticles());
+    }
+
+    addArticlePlaceholder() {
+        var placeholder = new ArticlePlaceholder();
+        this._grid.add(placeholder.getElementId(), placeholder.render());
+        return placeholder;
+    }
+
+    addRelatedSearch(searchData) {
+        var search = new RelatedSearch(searchData),
+            searchEl = search.render(),
+            MAX_ARTICLES = (GRID_ROWS - 1) * 2; // two rows with one missing col
+        // add text block
+        this._grid.add(search.getElementId(), searchEl, null, null, 1, 2);
+        // add related articles
+        var articles = searchData.articles;
+        // push missing articles
+        articles = searchData.articles.slice(0, MAX_ARTICLES);
+        while(articles.length < MAX_ARTICLES) {
+            articles.push(false);
+        }
+
+        // TODO articles get added after their image loaded (async)
+        // placeholders do not have images
+        // therefore they are loaded beforehand (sync)
+        articles.forEach(article => article === false ?
+                                        this.addArticlePlaceholder() :
+                                        this.addArticle(article));
     }
 
     createBucket(bucketId, articlesData, insertInlineBelow) {

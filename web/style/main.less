@@ -4,11 +4,12 @@
 @import 'catalog/article-controls';
 @import 'catalog/article-details';
 @import 'catalog/detail-overlay';
+@import 'catalog/related-search';
 @import 'index/index';
 
 @font-face {
     font-family: "Basic Icons";
-    src: url(fonts/Simple-Line-Icons.woff) format('woff');
+    src: url(./icons.woff) format('woff');
 }
 
 * {
@@ -20,15 +21,19 @@ html {
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
 
-    margin: 20px 10px;
+    margin: 20px;
     padding: 0;
 }
 
 h1, h2, h3, h4, h5, strong, b {
     font-weight: 700;
+}
+
+input {
+    font-weight: 100;
 }
 
 img {

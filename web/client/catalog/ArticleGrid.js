@@ -138,6 +138,24 @@ class ArticleGrid {
         }
     }
 
+    insertRowOffset(row, offset=this._rowHeight + this._spacing) {
+        this._rowOffsets.push({
+            row,
+            height: offset
+        });
+        this._columns.forEach(column =>
+            column.slice(row).forEach(item =>
+                this.reposition(item)));
+    }
+
+    removeRowOffsets() {
+        var minRowToReposition = this._rowOffsets.map(ro => ro.row).reduce((min, row) => Math.min(min, row), Infinity);
+        this._rowOffsets = [];
+        this._columns.forEach(column =>
+            column.slice(minRowToReposition).forEach(item =>
+                this.reposition(item)));
+    }
+
     hideDetails() {
         if (this._shownDetails) {
             var row = this._shownDetails.offset.row;

@@ -10,9 +10,9 @@ import Look from './Look';
 import RelatedSearch from './RelatedSearch';
 import Signal from '../common/Signal';
 
-const GRID_ROWS = 8,
-      GRID_COL_WIDTH = 133,
-      GRID_ROW_HEIGHT = 200,
+const GRID_ROWS = 4,
+      GRID_COL_WIDTH = 277,
+      GRID_ROW_HEIGHT = 400,
       GRID_SPACING = 20;
 
 class CatalogView {
@@ -35,7 +35,7 @@ class CatalogView {
         this._controls = new CatalogControls();
         this._detailOverlay = new DetailOverlay();
         this._grid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING);
-
+        this._subgrids = [];
         this.articleChanged = Signal.create();
     }
 
@@ -67,32 +67,28 @@ class CatalogView {
         $(window).resize(() => this.checkVisibleArticles());
     }
 
-    addArticlePlaceholder() {
-        var placeholder = new ArticlePlaceholder();
-        this._grid.add(placeholder.getElementId(), placeholder.render());
-        return placeholder;
-    }
-
     addRelatedSearch(searchData) {
         var search = new RelatedSearch(searchData),
             searchEl = search.render(),
-            MAX_ARTICLES = (GRID_ROWS - 1) * 2; // two rows with one missing col
-        // add text block
-        this._grid.add(search.getElementId(), searchEl, null, null, 1, 2);
-        // add related articles
-        var articles = searchData.articles;
-        // push missing articles
-        articles = searchData.articles.slice(0, MAX_ARTICLES);
-        while(articles.length < MAX_ARTICLES) {
-            articles.push(false);
-        }
+            subgrid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING),
+            subgridEl = subgrid.render();
 
-        // TODO articles get added after their image loaded (async)
-        // placeholders do not have images
-        // therefore they are loaded beforehand (sync)
-        articles.forEach(article => article === false ?
-                                        this.addArticlePlaceholder() :
-                                        this.addArticle(article));
+        // add text block
+        subgrid.add(search.getElementId(), searchEl, null, null, 2, 1);
+        // add related articles
+        searchData.articles.forEach(articleData => {
+            var article = new Article(articleData, this.articleChanged),
+                element = article.render();
+            article.clicked.connect(() => this.showArticleDetails(subgrid, article.getElementId(), articleData));
+            subgrid.add(article.getElementId(), element);
+        });
+        this._grid.add(`grid:{searchData.search}`, subgridEl, null, null, GRID_ROWS, 2);
+        this._subgrids.push({
+            id: `grid:{searchData.search}`,
+            grid: subgrid,
+            element: subgridEl,
+            resized: false
+        });
     }
 
     createBucket(bucketId, articlesData, insertInlineBelow) {
@@ -213,7 +209,7 @@ class CatalogView {
         var elementId = article.getElementId();
         var articleElement;
 
-        article.clicked.connect(() => this.showArticleDetails(elementId, articleData));
+        article.clicked.connect(() => this.showArticleDetails(this._grid, elementId, articleData));
         article.liked.connect(() => this.likeArticle(elementId, articleData));
         article.disliked.connect(() => this.dislikeArticle(elementId, articleData));
         article.loaded.connect(
@@ -274,7 +270,7 @@ class CatalogView {
         }
     }
 
-    showArticleDetails(elementId, articleData) {
+    showArticleDetails(grid, elementId, articleData) {
         if (!this._openedArticles[articleData.sku]) {
             this._openedArticles[articleData.sku] = true;
 
@@ -292,7 +288,30 @@ class CatalogView {
             this.articleChanged(articleData.sku);
         });
 
-        this._grid.showDetails(details.render(), elementId);
+        if (grid !== this._grid) {
+            this._grid.hideDetails();
+            var gridDesc = this._subgrids.filter(gridDesc => gridDesc.grid === grid)[0],
+                gridItem = this._grid.findItem(gridDesc.id);
+
+            if (!gridDesc.resized) {
+                gridItem.height += 1;
+                gridDesc.resized = true;
+                this._grid.insertRowOffset(gridItem.row + gridItem.height - 1);
+                this._grid.reposition(gridItem);
+            }
+        } else {
+            this._subgrids.forEach(gridDesc => {
+                var gridItem = this._grid.findItem(gridDesc.id);
+                gridDesc.grid.hideDetails();
+                if (gridDesc.resized) {
+                    gridItem.height -= 1;
+                    gridDesc.resized = false;
+                    this._grid.removeRowOffsets();
+                    this._grid.reposition(gridItem);
+                }
+            });
+        }
+        grid.showDetails(details.render(), elementId);
 
         articleData.opened = true;
         this.articleChanged(articleData.sku);

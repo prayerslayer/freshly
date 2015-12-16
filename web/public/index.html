@@ -8,7 +8,9 @@
         <link rel="stylesheet" href="freshly.css">
     </head>
 
-    <body class="index" style="background-image: url(/images/christmas-pattern.jpg);">
+    <body class="index">
+        <div class="background" style="background-image: url(/images/christmas-pattern.jpg);"></div>
+
         <div class="wrapper">
             <img
                 class="hero"
@@ -27,7 +29,8 @@
         <script src="/freshly.js"></script>
 
         <script>
-            new Freshly.HomeView($('form.search')).bootstrap();
+            Freshly.view = new Freshly.HomeView($('form.search'));
+            Freshly.view.bootstrap();
         </script>
     </body>
 </html>

@@ -14,6 +14,10 @@ app.use(express.static(path.join(__dirname, '../dist')));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../target/client')));
 
+app.get('/search/:search*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/catalog.html'));
+});
+
 app.get('/relatedSearch', (req, res) => {
     res
     .status(200)

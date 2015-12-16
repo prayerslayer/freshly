@@ -12,23 +12,15 @@ class HomeView {
         });
     }
 
+    getSearchElement() {
+        return this._searchElement;
+    }
+
     search(value) {
         console.log('search:', value);
 
-        this.runSearchTransition();
         history.pushState({}, `search:${value}`, `/search/${value}`);
-        window.onpopstate({});
-    }
-
-    runSearchTransition() {
-        var elements = this._searchElement.parent().children().not(this._searchElement);
-        elements.addClass('removing');
-
-        var currentPos = this._searchElement.position().top;
-        this._searchElement.css({top: currentPos, position: 'absolute'});
-        window.setTimeout(() => {
-            this._searchElement.css({top: 0, marginTop: 0});
-        });
+        window.onpopstate({state: null});
     }
 }
 

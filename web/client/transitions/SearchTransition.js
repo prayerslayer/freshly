@@ -4,32 +4,53 @@ class SearchTransition {
     }
 
     run() {
-        var searchTerm = window.location.pathname.substring('/search/'.length);
-        console.log('term:', searchTerm);
+        Freshly.view.search.updateFromUrl();
 
-        var searchElement = Freshly.view.getSearchElement();
-        searchElement.find('input').val(searchTerm);
+        var animationDone = this.runAnimation();
+        var contentLoaded = this.loadContent();
 
-        var root = searchElement.closest('.index');
+        Promise.all([animationDone, contentLoaded]).then(data => {
+            data[1].children().not('#search').appendTo($('#main'));
 
-        var elements = searchElement.parent().children().not(searchElement);
-        elements.addClass('removing');
+            Freshly.view.detach();
+            Freshly.view = new Freshly.CatalogView();
+        });
+    }
 
-        var background = root.children('.background');
-        background.css({opacity: 0});
+    runAnimation() {
+        return new Promise((resolve, reject) => {
+            var root = $('body');
+            var searchElement = Freshly.view.search.getElement();
 
-        var currentPos = searchElement.position().top;
-        searchElement.css({top: currentPos, position: 'absolute'});
-        window.setTimeout(() => {
-            searchElement.css({top: 0, marginTop: 0});
+            var elements = searchElement.parent().children().not(searchElement);
+            elements.addClass('removing');
 
-            root.one('transitionend webkitTransitionEnd oTransitionEnd', () => {
-                elements.remove();
-                background.remove();
+            var background = root.children('#background');
+            background.css({opacity: 0});
 
-                root.removeClass('index').addClass('catalog');
-                searchElement.attr('style', null);
+            var currentPos = searchElement.position().top;
+            searchElement.css({top: currentPos, position: 'absolute'});
+            window.setTimeout(() => {
+                searchElement.css({top: 0, marginTop: 0, boxShadow: 'none'});
+
+                searchElement.one('transitionend webkitTransitionEnd oTransitionEnd', () => {
+                    console.log('transition end!');
+
+                    elements.remove();
+                    background.remove();
+
+                    root.removeClass('index').addClass('catalog');
+                    searchElement.attr('style', null);
+
+                    resolve();
+                });
             });
+        });
+    }
+
+    loadContent() {
+        return $.get(window.location.pathname).then(result => {
+            return $(result).filter('#main');
         });
     }
 }

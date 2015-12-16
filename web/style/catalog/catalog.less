@@ -1,4 +1,4 @@
-.catalog {
+body.catalog {
     transition-duration: 0.5s;
     transition-timing-function: ease;
     transition-property: left, opacity;
@@ -6,11 +6,21 @@
     position: relative;
     left: 0;
     opacity: 1;
-}
 
-.catalog-headline {
-    font-size: 2em;
-    text-align: center;
-    letter-spacing: 0.025em;
-    color: #999;
+    #main {
+        overflow: hidden;
+        position: relative;
+
+        /*&.detail-overlay-active {
+            overflow-y: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }*/
+    }
+
+    form#search {
+        margin-top: 0;
+    }
 }

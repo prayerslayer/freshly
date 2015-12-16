@@ -8,19 +8,27 @@
         <link rel="stylesheet" href="/freshly.css">
     </head>
 
-    <body>
-        <div class="catalog-headline">
-            <h1 class="headline">Winterschuhe</h1>
+    <body class="catalog">
+        <div id="main">
+            <form id="search">
+                <input
+                    type="search"
+                    placeholder="Wie können wir dir helfen? ☺"
+                    autofocus="autofocus" />
+                <span class="search-icon"></span>
+            </form>
+
             <div
-                id="main"
+                id="results"
                 data-category="damenschuhe"
                 data-gender="FEMALE"></div>
         </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
         <script src="/freshly.js"></script>
 
         <script>
-            new Freshly.CatalogView($('#main')).bootstrap();
+            Freshly.view = new Freshly.CatalogView();
         </script>
     </body>
 </html>

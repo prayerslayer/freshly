@@ -9,14 +9,14 @@
     </head>
 
     <body class="index">
-        <div class="background" style="background-image: url(/images/christmas-pattern.jpg);"></div>
+        <div id="background" style="background-image: url(/images/christmas-pattern.jpg);"></div>
 
-        <div class="wrapper">
+        <div id="main">
             <img
                 class="hero"
                 src="https://secure-i4.ztat.net//camp/20/37/9f4003347b793d88638c2916d561.jpg"></img>
 
-            <form class="search">
+            <form id="search">
                 <input
                     type="search"
                     placeholder="Wie können wir dir helfen? ☺"
@@ -29,8 +29,7 @@
         <script src="/freshly.js"></script>
 
         <script>
-            Freshly.view = new Freshly.HomeView($('form.search'));
-            Freshly.view.bootstrap();
+            Freshly.view = new Freshly.HomeView();
         </script>
     </body>
 </html>

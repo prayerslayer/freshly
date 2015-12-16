@@ -9,6 +9,7 @@ import DetailOverlay from './DetailOverlay';
 import Look from './Look';
 import RelatedSearch from './RelatedSearch';
 import Signal from '../common/Signal';
+import SearchField from '../common/SearchField';
 
 const GRID_ROWS = 8,
       GRID_COL_WIDTH = 133,
@@ -16,8 +17,10 @@ const GRID_ROWS = 8,
       GRID_SPACING = 20;
 
 class CatalogView {
-    constructor(element) {
-        this._element = element;
+    constructor() {
+        this._element = $('#results');
+        this.search = new SearchField($('#search'));
+
         this._openedArticles = {};
         this._likedArticles = {};
         this._dislikedArticles = {};
@@ -37,6 +40,10 @@ class CatalogView {
         this._grid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING);
 
         this.articleChanged = Signal.create();
+
+        this._cleanup = [];
+
+        this.bootstrap();
     }
 
     bootstrap() {
@@ -50,9 +57,11 @@ class CatalogView {
                      .append(this._controls.render());
 
 
-        this._controls.clicked.connect(() => {
-            this.openOverlay();
-        });
+        this._cleanup.push(
+            this._controls.clicked.connect(() => {
+                this.openOverlay();
+            })
+        );
 
         // fetch some base articles
         var articlesRequest = $.getJSON('/articles?category=' + category);
@@ -63,8 +72,20 @@ class CatalogView {
         .done(relatedResults => relatedResults.forEach(result => this.addRelatedSearch(result)));
 
         // connect scroll and resize handlers
+        var checkVisible = () => this.checkVisibleArticles();
+        this._cleanup.push(() => {
+            $(window).off('scroll', checkVisible);
+            $(window).off('resize', checkVisible);
+        });
+
         $(window).scroll(() => this.checkVisibleArticles());
         $(window).resize(() => this.checkVisibleArticles());
+    }
+
+    detach() {
+        this.search.detach();
+
+        this._cleanup.forEach(cleanup => cleanup());
     }
 
     addArticlePlaceholder() {

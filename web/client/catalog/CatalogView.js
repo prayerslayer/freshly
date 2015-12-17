@@ -10,6 +10,7 @@ import Look from './Look';
 import Text from './Text';
 import Signal from '../common/Signal';
 import SearchField from '../common/SearchField';
+import PreviewGrid from './PreviewGrid';
 
 const GRID_ROWS = 4,
       GRID_COL_WIDTH = 277,
@@ -108,30 +109,8 @@ class CatalogView {
     }
 
     addRelatedSearch(searchData) {
-        var text = new Text(searchData.search),
-            textEl = text.render(),
-            subgrid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING),
-            subgridEl = subgrid.render();
-
-        // add text block
-        subgrid.add(text.getElementId(), textEl, null, null, 2, 1);
-        // add related articles
-        searchData.articles.forEach(articleData => {
-            var article = new Article(articleData, this.articleChanged),
-                elementId = article.getElementId(),
-                element = article.render();
-            article.clicked.connect(() => this.showArticleDetails(subgrid, elementId, articleData));
-            article.liked.connect(() => this.likeArticle(elementId, articleData));
-            article.disliked.connect(() => this.dislikeArticle(elementId, articleData));
-                subgrid.add(article.getElementId(), element);
-            });
-        this._grid.add(`grid:{searchData.search}`, subgridEl, null, null, GRID_ROWS, 2);
-        this._subgrids.push({
-            id: `grid:{searchData.search}`,
-            grid: subgrid,
-            element: subgridEl,
-            resized: false
-        });
+        var preview = new PreviewGrid(null, searchData.articles, GRID_COL_WIDTH, GRID_SPACING);
+        this._grid.add(preview.getElementId(), preview.render(), null, null, GRID_ROWS, 1);
     }
 
     createBucket(bucketId, articlesData, insertInlineBelow) {

@@ -58,6 +58,69 @@ app.get('/relatedSearch', (req, res) => {
             name: "Pantolette - black",
             price: "100 €",
             sku: "S4911F001-Q17"
+        },
+        {
+            attributes: [],
+            brand: "Brandnew",
+            brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
+            imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
+            name: "Pantolette - black",
+            price: "100 €",
+            sku: "S4911F001-Q14"
+        },
+        {
+            attributes: [],
+            brand: "Brandnew",
+            brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
+            imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
+            name: "Pantolette - black",
+            price: "100 €",
+            sku: "S4911F001-Q17"
+        },
+        {
+            attributes: [],
+            brand: "Brandnew",
+            brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
+            imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
+            name: "Pantolette - black",
+            price: "100 €",
+            sku: "S4911F001-Q14"
+        },
+        {
+            attributes: [],
+            brand: "Brandnew",
+            brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
+            imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
+            name: "Pantolette - black",
+            price: "100 €",
+            sku: "S4911F001-Q17"
+        },
+        {
+            attributes: [],
+            brand: "Brandnew",
+            brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
+            imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
+            name: "Pantolette - black",
+            price: "100 €",
+            sku: "S4911F001-Q14"
+        },
+        {
+            attributes: [],
+            brand: "Brandnew",
+            brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
+            imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
+            name: "Pantolette - black",
+            price: "100 €",
+            sku: "S4911F001-Q17"
+        },
+        {
+            attributes: [],
+            brand: "Brandnew",
+            brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
+            imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
+            name: "Pantolette - black",
+            price: "100 €",
+            sku: "S4911F001-Q14"
         }]
     }]);
 });

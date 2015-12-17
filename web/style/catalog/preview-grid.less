@@ -1,0 +1,26 @@
+.previewGrid {
+    background: darken(white, 2.5);
+    border: 1px solid darken(white, 5);
+    transition: 0.5s ease height;
+
+    .articles {
+        column-count: 3;
+        column-gap: 20px;
+
+        .previewArticle {
+            position: relative;
+            margin-top: 3px;
+            width: 133px;
+            height: 200px;
+            display: inline-block;
+            margin-right: 9px; // magic number, sorry
+            &:nth-child(even) {
+                margin-right: 0px;
+            }
+        }
+    }
+    .hero {
+        float: left;
+        height: 100%;
+    }
+}

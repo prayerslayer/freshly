@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import Signal from '../common/Signal';
-import ArticleControls from './ArticleControls';
 
 class Article {
     constructor(data, articleChanged) {
@@ -8,13 +7,8 @@ class Article {
 
         this.clicked = Signal.create();
         this.liked = Signal.create();
-        this.disliked = Signal.create();
         this.loaded = Signal.create();
         this.loadFailed = Signal.create();
-
-        this._articleControls = new ArticleControls(data);
-        this._articleControls.liked.connect(this.liked);
-        this._articleControls.disliked.connect(this.disliked);
 
         if (articleChanged) {
             articleChanged.connect(data.sku, () => this.articleChanged());
@@ -22,25 +16,15 @@ class Article {
     }
 
     render() {
-        this._element = $('<summary class="article" />');
+        this._element = $('<summary class="previewArticle" />');
 
         var articleImage = $('<img />').on('load', () => this.loaded())
                                        .on('error', () => this.loadFailed())
                                        .on('click', () => this.clicked())
                                        .attr('src', this._data.imageUrls[0]);
 
-        var articlePrice = $('<span class="price" />').text(this._data.price);
-
-        var articleBrand = $('<h3 />').text(this._data.brand);
-        var articleName = $('<h4 />').text(this._data.name);
-
-        var header = $('<header />').append(articleBrand)
-                                    .append(articleName);
-
-        this._element.append($('<div class="image" />').append(articleImage))
-                     .append(articlePrice)
-                     .append(header)
-                     .append(this._articleControls.render());
+        this._element.append(
+            $('<div class="image" />').append(articleImage));
 
         return this._element;
     }

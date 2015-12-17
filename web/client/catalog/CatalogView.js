@@ -7,7 +7,7 @@ import BucketStore from './BucketStore';
 import CatalogControls from './CatalogControls';
 import DetailOverlay from './DetailOverlay';
 import Look from './Look';
-import RelatedSearch from './RelatedSearch';
+import Text from './Text';
 import Signal from '../common/Signal';
 
 const GRID_ROWS = 4,
@@ -68,18 +68,21 @@ class CatalogView {
     }
 
     addRelatedSearch(searchData) {
-        var search = new RelatedSearch(searchData),
-            searchEl = search.render(),
+        var text = new Text(searchData.search),
+            textEl = text.render(),
             subgrid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING),
             subgridEl = subgrid.render();
 
         // add text block
-        subgrid.add(search.getElementId(), searchEl, null, null, 2, 1);
+        subgrid.add(text.getElementId(), textEl, null, null, 2, 1);
         // add related articles
         searchData.articles.forEach(articleData => {
             var article = new Article(articleData, this.articleChanged),
+                elementId = article.getElementId(),
                 element = article.render();
-            article.clicked.connect(() => this.showArticleDetails(subgrid, article.getElementId(), articleData));
+            article.clicked.connect(() => this.showArticleDetails(subgrid, elementId, articleData));
+            article.liked.connect(() => this.likeArticle(elementId, articleData));
+        article.disliked.connect(() => this.dislikeArticle(elementId, articleData));
             subgrid.add(article.getElementId(), element);
         });
         this._grid.add(`grid:{searchData.search}`, subgridEl, null, null, GRID_ROWS, 2);

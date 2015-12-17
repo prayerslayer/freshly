@@ -100,7 +100,7 @@ class CatalogView {
     }
 
     loadArticles(term) {
-        var articlesRequest = $.getJSON('/articles?search=' + term);
+        var articlesRequest = $.getJSON('/articles?search=' + term + '&maxResults=200');
         articlesRequest.done(articlesResult => this.createBucket('search', articlesResult));
 
         // fetch related search queries

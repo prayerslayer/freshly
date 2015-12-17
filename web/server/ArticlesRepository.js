@@ -44,13 +44,13 @@ function mapArticle(article) {
     };
 }
 
-function listByCategory(category) {
-    var articlesRequest = get('/articles?category=' + category);
+function listByCategory(category, max) {
+    var articlesRequest = get('/articles?category=' + category + '&pageSize=' + max);
     return articlesRequest.then(result => result.content.map(mapArticle));
 }
 
-function listBySearch(search) {
-    var articlesRequest = get('/articles?fullText=' + search);
+function listBySearch(search, max) {
+    var articlesRequest = get('/articles?fullText=' + search + '&pageSize=' + max);
     return articlesRequest.then(result => result.content.map(mapArticle));
 }
 
@@ -74,7 +74,7 @@ function listByLike(article, max) {
 class ArticlesRepository extends Repository {
     list(params) {
         if (params.category) {
-            return listByCategory(params.category);
+            return listByCategory(params.category, params.maxResults || 50);
         } else if (params.like) {
             return listByLike(params.like, params.maxResults || 50);
         } else if (params.search) {

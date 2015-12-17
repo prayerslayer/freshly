@@ -1,26 +1,25 @@
+import SearchField from '../common/SearchField';
+
 class HomeView {
-    constructor(searchElement) {
-        this._searchElement = searchElement;
+    constructor() {
+        this.search = new SearchField($('#search'));
+
+        this.bootstrapWinterschuhe();
     }
 
-    bootstrap() {
-        console.log('HomeView::bootstrap()');
+    detach() {
+        this.search.detach();
+    }
 
-        this._searchElement.submit(() => {
-            this.search(this._searchElement.find('input').val());
-            return false;
+    bootstrapWinterschuhe() {
+        var element = $('.search.winterschuhe');
+        element.click(() => this.search.search('winterschuhe'));
+
+        var articlesRequest = $.getJSON('/articles?search=winterschuhe');
+        articlesRequest.done(articlesResult => {
+            articlesResult.map(article => $(`<li><img src="${article.imageUrls[0]}" /></li>`))
+            .forEach(article => article.appendTo(element.find('.results')));
         });
-    }
-
-    getSearchElement() {
-        return this._searchElement;
-    }
-
-    search(value) {
-        console.log('search:', value);
-
-        history.pushState({}, `search:${value}`, `/search/${value}`);
-        window.onpopstate({state: null});
     }
 }
 

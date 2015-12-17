@@ -2,18 +2,28 @@ import $ from 'jquery';
 
 class ArticleGrid {
     constructor(numColumns, columnWidth, rowHeight, spacing) {
+        this._numColumns = numColumns;
+        this._init();
+
+        this._columnWidth = columnWidth;
+        this._rowHeight = rowHeight;
+        this._spacing = spacing;
+    }
+
+    _init() {
         this._columns = [];
-        for (var i = 0; i < numColumns; ++i) {
+        for (var i = 0; i < this._numColumns; ++i) {
             this._columns.push([]);
         }
 
         this._rowOffsets = [];
 
-        this._columnWidth = columnWidth;
-        this._rowHeight = rowHeight;
-        this._spacing = spacing;
-
         this._shownDetails = null;
+    }
+
+    purge() {
+        this._init();
+        this._element.children().remove();
     }
 
     render() {

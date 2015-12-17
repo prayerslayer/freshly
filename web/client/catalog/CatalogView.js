@@ -9,6 +9,7 @@ import DetailOverlay from './DetailOverlay';
 import Look from './Look';
 import Text from './Text';
 import Signal from '../common/Signal';
+import SearchField from '../common/SearchField';
 
 const GRID_ROWS = 4,
       GRID_COL_WIDTH = 277,
@@ -16,8 +17,25 @@ const GRID_ROWS = 4,
       GRID_SPACING = 20;
 
 class CatalogView {
-    constructor(element) {
-        this._element = element;
+    constructor() {
+        this._element = $('#results');
+        this.search = new SearchField($('#search'));
+
+        this._init();
+
+        this._controls = new CatalogControls();
+        this._detailOverlay = new DetailOverlay();
+        this._grid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING);
+        this._subgrids = [];
+
+        this.articleChanged = Signal.create();
+
+        this._cleanup = [];
+
+        this.bootstrap();
+    }
+
+    _init() {
         this._openedArticles = {};
         this._likedArticles = {};
         this._dislikedArticles = {};
@@ -31,16 +49,14 @@ class CatalogView {
         this._buckets = new BucketStore();
         this._looks = [];
         this._skuPosition = {};
-
-        this._controls = new CatalogControls();
-        this._detailOverlay = new DetailOverlay();
-        this._grid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING);
-        this._subgrids = [];
-        this.articleChanged = Signal.create();
     }
 
     bootstrap() {
-        var category = this._element.attr('data-category');
+        var searchTerm = this.search.getTerm();
+        this._cleanup.push(
+            this.search.changed.connect(term => this.purgeAndLoadArticles(term))
+        );
+
         this._gender = this._element.attr('data-gender');
 
         var catalogElement = $('<div class="catalog" />').append(this._grid.render());
@@ -50,21 +66,45 @@ class CatalogView {
                      .append(this._controls.render());
 
 
-        this._controls.clicked.connect(() => {
-            this.openOverlay();
-        });
+        this._cleanup.push(
+            this._controls.clicked.connect(() => {
+                this.openOverlay();
+            })
+        );
 
         // fetch some base articles
-        var articlesRequest = $.getJSON('/articles?category=' + category);
-        articlesRequest.done(articlesResult => this.createBucket('category', articlesResult));
-
-        // fetch related search queries
-        $.get('/relatedSearch?search=TODO')
-        .done(relatedResults => relatedResults.forEach(result => this.addRelatedSearch(result)));
+        this.loadArticles(this.search.getTerm());
 
         // connect scroll and resize handlers
+        var checkVisible = () => this.checkVisibleArticles();
+        this._cleanup.push(() => {
+            $(window).off('scroll', checkVisible);
+            $(window).off('resize', checkVisible);
+        });
+
         $(window).scroll(() => this.checkVisibleArticles());
         $(window).resize(() => this.checkVisibleArticles());
+    }
+
+    detach() {
+        this.search.detach();
+
+        this._cleanup.forEach(cleanup => cleanup());
+    }
+
+    purgeAndLoadArticles(term) {
+        this._init();
+        this._grid.purge();
+        this.loadArticles(term);
+    }
+
+    loadArticles(term) {
+        var articlesRequest = $.getJSON('/articles?search=' + term);
+        articlesRequest.done(articlesResult => this.createBucket('search', articlesResult));
+
+        // fetch related search queries
+        $.get('/relatedSearch?search=' + term)
+        .done(relatedResults => relatedResults.forEach(result => this.addRelatedSearch(result)));
     }
 
     addRelatedSearch(searchData) {
@@ -82,9 +122,9 @@ class CatalogView {
                 element = article.render();
             article.clicked.connect(() => this.showArticleDetails(subgrid, elementId, articleData));
             article.liked.connect(() => this.likeArticle(elementId, articleData));
-        article.disliked.connect(() => this.dislikeArticle(elementId, articleData));
-            subgrid.add(article.getElementId(), element);
-        });
+            article.disliked.connect(() => this.dislikeArticle(elementId, articleData));
+                subgrid.add(article.getElementId(), element);
+            });
         this._grid.add(`grid:{searchData.search}`, subgridEl, null, null, GRID_ROWS, 2);
         this._subgrids.push({
             id: `grid:{searchData.search}`,

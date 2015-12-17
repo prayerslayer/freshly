@@ -40,7 +40,7 @@ function mapArticle(article) {
         attributes: (article.additionalInfos || [])
             .filter(info => info && info.length > 0)
             .concat((article.attributes || [])
-                .map(attribute => attribute.name + ": " + attribute.values.join(', ')))
+                .map(attribute => attribute.name + ': ' + attribute.values.join(', ')))
     };
 }
 
@@ -49,18 +49,23 @@ function listByCategory(category) {
     return articlesRequest.then(result => result.content.map(mapArticle));
 }
 
+function listBySearch(search) {
+    var articlesRequest = get('/articles?fullText=' + search);
+    return articlesRequest.then(result => result.content.map(mapArticle));
+}
+
 function listByLike(article, max) {
     var recoRequest = get('/recommendations/' + article + '?pageSize=' + max);
     return recoRequest.then(result => {
         var ids = result.map(recoArticle => recoArticle.id);
         var paramStr = ids.map(id => 'articleId=' + id).join('&');
-        
+
         var articlesRequest = get('/articles?' + paramStr);
         return articlesRequest.then(articlesResult => {
             var articles = articlesResult.content.reduce(
                 (collect, article) => { collect[article.id] = article; return collect; },
                 {});
-            
+
             return ids.map(id => articles[id]).map(mapArticle);
         });
     });
@@ -72,8 +77,10 @@ class ArticlesRepository extends Repository {
             return listByCategory(params.category);
         } else if (params.like) {
             return listByLike(params.like, params.maxResults || 50);
+        } else if (params.search) {
+            return listBySearch(params.search, params.maxResults || 50);
         }
-        
+
         throw 'illegal request: ' + params;
     }
 }

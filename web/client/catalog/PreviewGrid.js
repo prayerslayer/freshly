@@ -3,44 +3,32 @@ import PreviewArticle from  './PreviewArticle';
 import uuid from 'uuid';
 
 class PreviewGrid {
-    constructor(heroElement, articles, colWidth, colSpacing) {
+    constructor(teaserElement, articles, articleClicked) {
         this._element = $('<main class="previewGrid" />');
-        this._heroEl = heroElement || $('<h1>Könnte Dir gefallen:</h1>');
+        this._teaserEl = teaserElement || $('<div><h2>Könnte Dir gefallen:</h2><h3>Das da</h3></div>');
         this._articleDatas = articles;
-        this._colWidth = colWidth;
-        this._colSpacing = colSpacing;
+        this._articleClicked = articleClicked;
+        this._id = uuid.v4();
         this.init();
     }
 
     getElementId() {
-        return 'preview:' + uuid.v4();
+        return 'preview:' + this._id;
     }
 
     init() {
         // add hero
-        var heroContainer = $('<div class="hero"/>');
-        heroContainer.css({
-            width: this._colWidth + 'px',
-            marginRight: this._colSpacing + 'px',
-            paddingLeft: (this._colSpacing / 2) + 'px',
-            paddingRight: (this._colSpacing / 2) + 'px'
-        });
-        heroContainer.append(this._heroEl);
+        this._element.append(this._teaserEl);
 
-        var articleContainer = $('<div class="articles"/>');
-        this._element.append(heroContainer);
+        var articleContainer = $('<ul class="results"/>');
         this._element.append(articleContainer);
-
-        var articleWidth = (this._colWidth - 10) / 2;
 
         this._articleDatas.forEach(articleData => {
             var article = new PreviewArticle(articleData),
                 element = article.render();
-            element.css({
-                width: articleWidth
-            });
+            article.clicked.connect(this._articleClicked);
             article.loaded.connect(() => {
-                articleContainer.append(element);
+                articleContainer.append($('<li/>').append(element));
             })
         });
     }

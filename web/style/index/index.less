@@ -15,6 +15,14 @@ body.index {
         margin: 0 auto;
         position: relative;
 
+
+        .teaser {
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+        }
+
         > * {
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
             position: relative;
@@ -30,78 +38,6 @@ body.index {
 
             > * {
                 box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
-            }
-
-            > .search {
-                padding: 0;
-                height: 300px;
-                display: flex;
-                overflow: hidden;
-
-                background-color: #f0f0f0;
-
-                > .teaser {
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
-                    cursor: pointer;
-
-                    width: 500px;
-                    padding: 20px 120px;
-                    margin: 0 -100px;
-                    flex: 0 0 auto;
-
-                    h2 {
-                        font-size: 16px;
-                        font-weight: 100;
-                        margin: 0;
-                    }
-
-                    h3 {
-                        font-size: 36px;
-                        font-weight: 100;
-                        margin: 0;
-                    }
-                }
-
-                > ul.results {
-                    list-style: none;
-                    margin: 0;
-                    padding: 0;
-                    height: 100%;
-                    overflow: hidden;
-
-                    > * {
-                        float: right;
-                        height: 150px;
-                        width: 102px;
-                        /*border-left: 1px solid #d0d0d0;
-                        border-bottom: 1px solid #d0d0d0;*/
-                        margin: 0;
-                        position: relative;
-
-                        img {
-                            height: 100%;
-                            width: 100%;
-                        }
-
-                        &:after {
-                            display: block;
-                            content: " ";
-                            position: absolute;
-                            top: 0;
-                            bottom: 0;
-                            left: 0;
-                            right: 0;
-
-                            pointer-events: none;
-
-                            background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 100%); /* FF3.6+ */
-                            background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 100%); /* Chrome10+,Safari5.1+ */
-                            background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 100%); /* W3C */
-                        }
-                    }
-                }
             }
         }
     }

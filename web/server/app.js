@@ -18,6 +18,8 @@ app.get('/search/:search*', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/catalog.html'));
 });
 
+
+
 app.get('/relatedSearch', (req, res) => {
     res
     .status(200)
@@ -25,7 +27,7 @@ app.get('/relatedSearch', (req, res) => {
         search: 'goretex',
         articles: [{
             attributes: [],
-            brand: "Brandnew",
+            brand: "Brandnew 1",
             brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
             imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
             name: "Pantolette - black",
@@ -34,7 +36,7 @@ app.get('/relatedSearch', (req, res) => {
         },
         {
             attributes: [],
-            brand: "Brandnew",
+            brand: "Brandnew 2",
             brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
             imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
             name: "Pantolette - black",
@@ -43,7 +45,7 @@ app.get('/relatedSearch', (req, res) => {
         },
         {
             attributes: [],
-            brand: "Brandnew",
+            brand: "Brandnew 3",
             brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
             imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
             name: "Pantolette - black",
@@ -52,7 +54,7 @@ app.get('/relatedSearch', (req, res) => {
         },
         {
             attributes: [],
-            brand: "Brandnew",
+            brand: "Brandnew 4",
             brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
             imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
             name: "Pantolette - black",
@@ -61,7 +63,7 @@ app.get('/relatedSearch', (req, res) => {
         },
         {
             attributes: [],
-            brand: "Brandnew",
+            brand: "Brandnew 5",
             brandLogo: "https://i1.ztat.net/brand/sam-edelman.jpg",
             imageUrls: ["https://i2.ztat.net/detail_hd/S4/91/1F/00/1Q/11/S4911F001-Q11@12.jpg"],
             name: "Pantolette - black",

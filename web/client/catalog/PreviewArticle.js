@@ -6,7 +6,6 @@ class Article {
         this._data = data;
 
         this.clicked = Signal.create();
-        this.liked = Signal.create();
         this.loaded = Signal.create();
         this.loadFailed = Signal.create();
 
@@ -20,11 +19,11 @@ class Article {
 
         var articleImage = $('<img />').on('load', () => this.loaded())
                                        .on('error', () => this.loadFailed())
-                                       .on('click', () => this.clicked())
+                                       .on('click', () => this.clicked(this._data))
                                        .attr('src', this._data.imageUrls[0]);
 
-        this._element.append(
-            $('<div class="image" />').append(articleImage));
+        this._element
+            .append($('<div class="image" />').append(articleImage));
 
         return this._element;
     }

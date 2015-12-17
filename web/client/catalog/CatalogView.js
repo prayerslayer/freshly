@@ -12,7 +12,7 @@ import Signal from '../common/Signal';
 import SearchField from '../common/SearchField';
 import PreviewGrid from './PreviewGrid';
 
-const GRID_ROWS = 4,
+const GRID_COLS = 4,
       GRID_COL_WIDTH = 277,
       GRID_ROW_HEIGHT = 400,
       GRID_SPACING = 20;
@@ -26,7 +26,7 @@ class CatalogView {
 
         this._controls = new CatalogControls();
         this._detailOverlay = new DetailOverlay();
-        this._grid = new ArticleGrid(GRID_ROWS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING);
+        this._grid = new ArticleGrid(GRID_COLS, GRID_COL_WIDTH, GRID_ROW_HEIGHT, GRID_SPACING);
         this._subgrids = [];
 
         this.articleChanged = Signal.create();
@@ -105,12 +105,20 @@ class CatalogView {
 
         // fetch related search queries
         $.get('/relatedSearch?search=' + term)
-        .done(relatedResults => relatedResults.forEach(result => this.addRelatedSearch(result)));
+        .done((relatedResults, i) => {
+            setTimeout(() =>
+                relatedResults.forEach(result =>
+                    // cheap way to interleave with results
+                    this.addRelatedSearch(result)), Math.random() * 5000)
+        });
     }
 
     addRelatedSearch(searchData) {
-        var preview = new PreviewGrid(null, searchData.articles, GRID_COL_WIDTH, GRID_SPACING);
-        this._grid.add(preview.getElementId(), preview.render(), null, null, GRID_ROWS, 1);
+        var clickSignal = Signal.create();
+        var preview = new PreviewGrid(null, searchData.articles, clickSignal);
+        clickSignal.connect(articleData =>
+            this.showArticleDetails(preview.getElementId(), articleData));
+        this._grid.add(preview.getElementId(), preview.render(), null, null, GRID_COLS, 1);
     }
 
     createBucket(bucketId, articlesData, insertInlineBelow) {
@@ -231,7 +239,7 @@ class CatalogView {
         var elementId = article.getElementId();
         var articleElement;
 
-        article.clicked.connect(() => this.showArticleDetails(this._grid, elementId, articleData));
+        article.clicked.connect(() => this.showArticleDetails(elementId, articleData));
         article.liked.connect(() => this.likeArticle(elementId, articleData));
         article.disliked.connect(() => this.dislikeArticle(elementId, articleData));
         article.loaded.connect(
@@ -292,7 +300,7 @@ class CatalogView {
         }
     }
 
-    showArticleDetails(grid, elementId, articleData) {
+    showArticleDetails(elementId, articleData) {
         if (!this._openedArticles[articleData.sku]) {
             this._openedArticles[articleData.sku] = true;
 
@@ -310,30 +318,30 @@ class CatalogView {
             this.articleChanged(articleData.sku);
         });
 
-        if (grid !== this._grid) {
-            this._grid.hideDetails();
-            var gridDesc = this._subgrids.filter(gridDesc => gridDesc.grid === grid)[0],
-                gridItem = this._grid.findItem(gridDesc.id);
+        // if (grid !== this._grid) {
+        //     this._grid.hideDetails();
+        //     var gridDesc = this._subgrids.filter(gridDesc => gridDesc.grid === grid)[0],
+        //         gridItem = this._grid.findItem(gridDesc.id);
 
-            if (!gridDesc.resized) {
-                gridItem.height += 1;
-                gridDesc.resized = true;
-                this._grid.insertRowOffset(gridItem.row + gridItem.height - 1);
-                this._grid.reposition(gridItem);
-            }
-        } else {
-            this._subgrids.forEach(gridDesc => {
-                var gridItem = this._grid.findItem(gridDesc.id);
-                gridDesc.grid.hideDetails();
-                if (gridDesc.resized) {
-                    gridItem.height -= 1;
-                    gridDesc.resized = false;
-                    this._grid.removeRowOffsets();
-                    this._grid.reposition(gridItem);
-                }
-            });
-        }
-        grid.showDetails(details.render(), elementId);
+        //     if (!gridDesc.resized) {
+        //         gridItem.height += 1;
+        //         gridDesc.resized = true;
+        //         this._grid.insertRowOffset(gridItem.row + gridItem.height - 1);
+        //         this._grid.reposition(gridItem);
+        //     }
+        // } else {
+        //     this._subgrids.forEach(gridDesc => {
+        //         var gridItem = this._grid.findItem(gridDesc.id);
+        //         gridDesc.grid.hideDetails();
+        //         if (gridDesc.resized) {
+        //             gridItem.height -= 1;
+        //             gridDesc.resized = false;
+        //             this._grid.removeRowOffsets();
+        //             this._grid.reposition(gridItem);
+        //         }
+        //     });
+        // }
+        this._grid.showDetails(details.render(), elementId);
 
         articleData.opened = true;
         this.articleChanged(articleData.sku);

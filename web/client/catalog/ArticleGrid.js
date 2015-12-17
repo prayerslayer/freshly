@@ -98,7 +98,8 @@ class ArticleGrid {
 
     showDetails(detailsElement, belowElementId) {
         if (this._shownDetails) {
-            if (this._shownDetails.id === belowElementId) {
+            if (this._shownDetails.id === belowElementId &&
+                !belowElementId.startsWith('preview:')) {
                 return;
             }
 

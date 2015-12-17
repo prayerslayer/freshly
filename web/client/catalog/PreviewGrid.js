@@ -5,7 +5,7 @@ import uuid from 'uuid';
 class PreviewGrid {
     constructor(teaserElement, articles, articleClicked) {
         this._element = $('<main class="previewGrid" />');
-        this._teaserEl = teaserElement || $('<div><h2>Könnte Dir gefallen:</h2><h3>Das da</h3></div>');
+        this._teaserEl = teaserElement || $('<div class="teaser"><h2>Könnte Dir gefallen:</h2><h3>Das da</h3></div>');
         this._articleDatas = articles;
         this._articleClicked = articleClicked;
         this._id = uuid.v4();
